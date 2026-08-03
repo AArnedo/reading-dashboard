@@ -1,7 +1,10 @@
 import React from 'react'
+import { Layout } from './components/Layout'
 
 export const App = () => {
   return (
-    <div>Hola Mundo</div>
+    <Layout>
+      <h1>Hellou</h1>
+    </Layout>
   )
 }

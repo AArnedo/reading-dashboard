@@ -1,1 +1,20 @@
+/* Google Fonts */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
 @import "tailwindcss";
+
+@theme{
+    --font-principal: "Lora";
+    --font-secundaria: "Inter";
+
+    --color-background: #FAF6F0;
+    --color-surface: #FFFDF9;
+    --color-border: #E8E1D6;
+    --color-principal: #2E2A26;
+    --color-secundario: #6B6259;
+    --color-accent: #C4693D;
+    --color-accent-dark: #A8552F;
+    --color-sage: #7A8B6F;
+    --color-sage-light: #E4E9DE;
+}
