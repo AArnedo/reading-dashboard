@@ -1,10 +1,11 @@
 import React from 'react'
 import { Layout } from './components/Layout'
+import { Dashboard } from './pages/Dashboard'
 
 export const App = () => {
   return (
-    <Layout>
-      <h1>Hellou</h1>
-    </Layout>
+    <div>
+      <Dashboard/>
+    </div>
   )
 }
