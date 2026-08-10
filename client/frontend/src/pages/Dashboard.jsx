@@ -2,6 +2,7 @@ import { Layout } from '../components/Layout'
 import React from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
+import { FilterTabs } from '../components/FilterTabs'
 
 
 const books = [
@@ -45,6 +46,9 @@ export const Dashboard = () => {
                 <div>
                     <button className='bg-accent px-6 py-2 rounded-2xl text-md text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
                 </div>
+            </div>
+            <div className='pb-8'>
+                <FilterTabs/>
             </div>
             <div className='flex gap-8 flex-wrap'>
                 {books.map((book) =>(
