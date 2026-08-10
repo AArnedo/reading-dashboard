@@ -3,7 +3,7 @@ import { Header } from './Header'
 
 export const Layout = ({ children }) => {
   return (
-    <div className='bg-background p-6'>
+    <div className='bg-background p-10'>
         <Header />
         <main className='pt-14'>
             {children}
