@@ -3,28 +3,7 @@ import React from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
-
-
-const books = [
-    {
-        id: 1,
-        title: 'Cien años de soledad',
-        author: 'Garcia Marquez',
-        status: 'Leido'
-    },
-    {
-        id: 2,
-        title: 'Rayuela',
-        author: 'Julio Cortazar',
-        status: 'Leyendo'
-    },
-    {
-        id: 3,
-        title: 'Harry Potter y la camara secreta',
-        author: 'J.K. Rowling',
-        status: 'Por Leer'
-    },
-]
+import {books} from '../data/books.js'
 
 export const Dashboard = () => {
   return (
