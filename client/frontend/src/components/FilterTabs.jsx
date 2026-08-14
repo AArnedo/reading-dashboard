@@ -9,9 +9,9 @@ const filters = [
 
 export const FilterTabs = ({label, count, active}) => {
   return (
-    <div className='flex gap-4 flex-wrap'>
+    <div className='flex justify-between md:justify-start gap-4 flex-wrap'>
         {filters.map((filter) =>(
-            <span className='rounded-full px-4 py-2 text-sm border-border border hover:bg-accent cursor-pointer hover:text-sage-light'>{filter.label} ({filter.count})</span>
+            <span className='rounded-full px-4 py-2 text-xs md:text-sm border-border border hover:bg-accent cursor-pointer hover:text-sage-light'>{filter.label} ({filter.count})</span>
         ))}
     </div>
   )
