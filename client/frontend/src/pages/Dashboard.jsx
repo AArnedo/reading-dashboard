@@ -1,14 +1,28 @@
 import { Layout } from '../components/Layout'
-import React from 'react'
+import React, { useState } from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
 import {books} from '../data/books.js'
 
 export const Dashboard = () => {
+    const [activeFilter, setActiveFilter] = useState('todos');
+    const [searchQuery, setSearchQuery] = useState('')
+
+    const filteredBooks = books.filter((book) => {
+        const matchesStatus = activeFilter === 'todos' || book.status === activeFilter
+        
+        const matchesSearch = 
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        book.author.toLowerCase().includes(searchQuery.toLowerCase())
+
+        return matchesStatus && matchesSearch
+    })
+
+
   return (
     <div>
-        <Layout>
+        <Layout searchQuery={searchQuery} onSearchChange={setSearchQuery}>
             <div>
                 <span className='text-md md:text-xl text-secundario font-principal'>Hola Agustin - esto es lo que estas leyendo...</span>
             </div>
@@ -28,10 +42,10 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className='py-8 font-principal'>
-                <FilterTabs/>
+                <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter}/>
             </div>
             <div className='flex gap-8 flex-wrap'>
-                {books.map((book) =>(
+                {filteredBooks.map((book) =>(
                     <BookCard
                         key={book.id}
                         id={book.id}

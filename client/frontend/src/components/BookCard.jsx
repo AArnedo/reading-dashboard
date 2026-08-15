@@ -1,8 +1,12 @@
 import React from 'react'
 import { IoBookOutline } from "react-icons/io5";
+import { bookStatus } from '../data/bookStatus';
 
 
 export const BookCard = ({ title, author,status }) => {
+  
+  const statusInfo = bookStatus[status]
+
   return (
     <div className='flex flex-col gap-2'>
         <div className='w-60 md:w-80 h-80 md:h-100 flex justify-center items-center rounded-xl bg-sage'>
@@ -13,7 +17,7 @@ export const BookCard = ({ title, author,status }) => {
             <span className='text-sm text-secundario italic'>{author}</span>
         </div>
         <div className='pt-2 md:pt-4'>
-          <span className='px-8 py-2 rounded-xl bg-sage-light text-sm text-secundario'>{status}</span>
+          <span className={`px-8 py-2 rounded-xl text-sm ${statusInfo.badgeClass}`}>{statusInfo.label}</span>
         </div>
     </div>
   )

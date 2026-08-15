@@ -3,18 +3,18 @@ export const books = [
         id: 1,
         title: 'Cien años de soledad',
         author: 'Garcia Marquez',
-        status: 'Leido'
+        status: 'leido'
     },
     {
         id: 2,
         title: 'Rayuela',
         author: 'Julio Cortazar',
-        status: 'Leyendo'
+        status: 'leyendo'
     },
     {
         id: 3,
         title: 'Harry Potter y la camara secreta',
         author: 'J.K. Rowling',
-        status: 'Por Leer'
+        status: 'quiero-leer'
     },
 ]
