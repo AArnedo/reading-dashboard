@@ -4,6 +4,7 @@ import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
 import {books} from '../data/books.js'
+import { ModalLibrary } from '../components/ModalLibrary.jsx'
 
 export const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState('todos');
@@ -18,6 +19,9 @@ export const Dashboard = () => {
 
         return matchesStatus && matchesSearch
     })
+
+    /* modal */
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
 
   return (
@@ -38,7 +42,7 @@ export const Dashboard = () => {
                     <p className='text-md md:text-lg text-secundario font-principal italic'>3 libros en tu coleccion</p>
                 </div>
                 <div className='font-secundario'>
-                    <button className='bg-accent px-6 py-2 rounded-2xl text-sm md:text-lg text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
+                    <button onClick={() => setIsModalOpen(true)} className='bg-accent px-6 py-2 rounded-2xl text-sm md:text-lg text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
                 </div>
             </div>
             <div className='py-8 font-principal'>
@@ -54,6 +58,13 @@ export const Dashboard = () => {
                         status={book.status}
                     />
                 ))}
+            </div>
+            <div>
+                {isModalOpen && (
+                    <ModalLibrary onCloseModal={() => setIsModalOpen(false)}>
+                        <p>Ahora si funciona!</p>
+                    </ModalLibrary>
+                )}
             </div>
         </Layout>
     </div>
