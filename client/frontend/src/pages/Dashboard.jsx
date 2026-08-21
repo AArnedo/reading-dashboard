@@ -3,13 +3,17 @@ import React, { useState } from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
-import {books} from '../data/books.js'
+import { books as initialBooks } from '../data/books.js'
 import { ModalLibrary } from '../components/ModalLibrary.jsx'
+import { BookSearch } from '../components/BookSearch.jsx'
 
 export const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState('todos');
     const [searchQuery, setSearchQuery] = useState('')
+    const [books, setBooks] = useState(initialBooks);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
+    
     const filteredBooks = books.filter((book) => {
         const matchesStatus = activeFilter === 'todos' || book.status === activeFilter
         
@@ -19,9 +23,15 @@ export const Dashboard = () => {
 
         return matchesStatus && matchesSearch
     })
+    
 
-    /* modal */
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    /* new book */
+    const handleAddBook = (newBook) =>{
+        setBooks([...books, newBook])
+    }
+
+     
+
 
 
   return (
@@ -62,7 +72,7 @@ export const Dashboard = () => {
             <div>
                 {isModalOpen && (
                     <ModalLibrary onCloseModal={() => setIsModalOpen(false)}>
-                        <p>Ahora si funciona!</p>
+                        <BookSearch onAddBook={handleAddBook}/>   
                     </ModalLibrary>
                 )}
             </div>

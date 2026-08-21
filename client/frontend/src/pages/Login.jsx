@@ -28,12 +28,12 @@ export const Login = () => {
               </div>
             </div>
           </form>
-          <a className='text-accent text-sm flex justify-end my-4'>¿Olvidaste la contraseña?</a>
+          <a className='text-accent text-sm flex justify-end my-4 hover:text-accent-dark cursor-pointer hover:underline'>¿Olvidaste la contraseña?</a>
           <div>
-            <button className='bg-accent py-2 rounded-xl text-background block w-full'>Iniciar sesión</button>
+            <button className='bg-accent py-2 rounded-xl text-background block w-full cursor-pointer hover:bg-accent-dark'>Iniciar sesión</button>
           </div>
           <div className='pt-4 text-sm flex justify-center gap-2'>
-            <span>¿No tenes cuenta?</span><a className='text-accent'>Regístrate</a>
+            <span>¿No tenes cuenta?</span><a className='text-accent cursor-pointer hover:underline'>Regístrate</a>
           </div>
         </div>
     </AuthLayout>
