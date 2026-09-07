@@ -12,8 +12,7 @@ export const Dashboard = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [books, setBooks] = useState(initialBooks);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    
+  
     const filteredBooks = books.filter((book) => {
         const matchesStatus = activeFilter === 'todos' || book.status === activeFilter
         
@@ -29,11 +28,20 @@ export const Dashboard = () => {
     const handleAddBook = (newBook) =>{
         setBooks([...books, newBook])
     }
+    /* update book */
+    const handleStatusChange = (id, newStatus) => {
+        setBooks(
+            books.map((book) =>
+                book.id === id ? { ...book, status: newStatus} : book
+            )
+        )
+    }
+    /* delete book */
+    const handleDeleteBook = (id) => {
+        setBooks(books.filter((book) => book.id !== id))
+    }
 
      
-
-
-
   return (
     <div>
         <Layout searchQuery={searchQuery} onSearchChange={setSearchQuery}>
@@ -66,6 +74,8 @@ export const Dashboard = () => {
                         title={book.title}
                         author={book.author}
                         status={book.status}
+                        onStatusChange={handleStatusChange}
+                        onDelete={handleDeleteBook}
                     />
                 ))}
             </div>
