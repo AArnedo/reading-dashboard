@@ -66,7 +66,7 @@ export const Dashboard = () => {
             <div className='py-8 font-principal'>
                 <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter}/>
             </div>
-            <div className='flex gap-8 flex-wrap'>
+            <div className='flex items-center justify-center md:justify-start gap-4 flex-wrap'>
                 {filteredBooks.map((book) =>(
                     <BookCard
                         key={book.id}
