@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: "El titulo y el autor son obligatorios" })
         }
         const newBook = await Book.create({ title, author, status })
-        res.status(201).json(newBook, { message: 'Libro creado correctamente'})
+        res.status(201).json({ book: newBook, message: 'Libro creado correctamente' })
     
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -37,16 +37,16 @@ router.put('/:id', async (req, res) =>{
         const { title, author, status } = req.body || {}
         const updateBook = await Book.findByIdAndUpdate(
             id,
-            { title, author, status },
+            { $set: {title, author, status} },
             { new: true, runValidators: true}
         )
 
         if (!updateBook) {
-            res.status(404).json({ message: 'Libro no encontrado' })
+            return res.status(404).json({ message: 'Libro no encontrado' })
         }
         res.status(200).json({ updateBook, message: 'Libro actualizado correctamente'})
     } catch (error) {
-        res.status(400).json({message: 'Error al actualizar el libro', error})
+        return res.status(400).json({message: 'Error al actualizar el libro', error: error.message})
     }
 })
 
@@ -59,11 +59,11 @@ router.delete('/:id', async (req, res) =>{
             id,
         )
         if(!deleteBook) {
-            res.status(404).json({ message: 'No se encontro el libro'})
+            return res.status(404).json({ message: 'No se encontro el libro'})
         }
         res.status(200).json({message:'Libro eliminado correctamente'})
     } catch (error) {
-        res.status(400).json({message: 'Error al eliminar libro', error})
+        return res.status(400).json({message: 'Error al eliminar libro', error: error.message})
     }
 })
 
