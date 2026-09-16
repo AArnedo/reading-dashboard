@@ -1,5 +1,5 @@
 import { Layout } from '../components/Layout'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
@@ -10,8 +10,21 @@ import { BookSearch } from '../components/BookSearch.jsx'
 export const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState('todos');
     const [searchQuery, setSearchQuery] = useState('')
-    const [books, setBooks] = useState(initialBooks);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [books, setBooks] = useState([]);
+
+    useEffect(() =>{
+        const fetchBooks = async () =>{
+            try{
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/books`)
+                const data = await response.json()
+                setBooks(data)
+            } catch (error) {
+                console.log('Error al traer los libros', error)
+            }
+        }
+        fetchBooks()
+    }, [])
   
     const filteredBooks = books.filter((book) => {
         const matchesStatus = activeFilter === 'todos' || book.status === activeFilter
@@ -25,20 +38,43 @@ export const Dashboard = () => {
     
 
     /* new book */
-    const handleAddBook = (newBook) =>{
-        setBooks([...books, newBook])
+    const handleAddBook = async (newBook) =>{
+        try{
+            const response = await fetch (`${import.meta.env.VITE_API_URL}/books`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(newBook)
+            })
+            const data = await response.json();
+            setBooks([...books, data.book]);
+        } catch (error){
+            console.error('Error al agregar libro', error)
+        }
     }
+
     /* update book */
-    const handleStatusChange = (id, newStatus) => {
-        setBooks(
-            books.map((book) =>
-                book.id === id ? { ...book, status: newStatus} : book
-            )
-        )
+    const handleStatusChange = async (id, newStatus) => {
+        try{
+            const response = await fetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify({ status: newStatus }),
+            })
+            const data = await response.json();
+            setBooks(books.map((book) => (book._id === id ? data.updateBook : book)))
+        } catch (error){
+            console.error('Error al editar libro', error)
+        }
     }
+
     /* delete book */
-    const handleDeleteBook = (id) => {
-        setBooks(books.filter((book) => book.id !== id))
+    const handleDeleteBook = async (id) => {
+        try{
+            const response = await fetch (`${import.meta.env.VITE_API_URL}/books/${id}`, { method: 'DELETE' })
+            setBooks(books.filter((book) => book._id !== id))
+        } catch (error) {
+            console.error('Error al eliminar el libro', error)
+        }
     }
 
      
@@ -69,8 +105,8 @@ export const Dashboard = () => {
             <div className='flex items-center justify-center md:justify-start gap-4 flex-wrap'>
                 {filteredBooks.map((book) =>(
                     <BookCard
-                        key={book.id}
-                        id={book.id}
+                        key={book._id}
+                        id={book._id}
                         title={book.title}
                         author={book.author}
                         status={book.status}

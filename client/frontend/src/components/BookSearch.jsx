@@ -30,7 +30,6 @@ export const BookSearch = ({ onAddBook }) => {
 
     const handleAddClick = (book) =>{
         const newBook = {
-            id: book.key,
             title: book.title,
             author: book.author_name?.[0] || "autor desconocido",
             status: 'quiero-leer'
