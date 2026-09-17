@@ -1,13 +1,4 @@
-import React from 'react'
-
-const filters = [
-    {label: 'Todos', value: 'todos', count: 24},
-    {label: 'Leyendo', value: 'leyendo', count:8},
-    {label: 'Quiero Leer', value: 'quiero-leer', count:2},
-    {label: 'Leído', value: 'leido', count:4},
-]
-
-export const FilterTabs = ({ activeFilter, onSelect }) => {
+export const FilterTabs = ({ activeFilter, onSelect, filters }) => {
   return (
     <div className='flex justify-between md:justify-start gap-4 flex-wrap'>
         {filters.map((filter) =>(

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
 import { FilterTabs } from '../components/FilterTabs'
-import { books as initialBooks } from '../data/books.js'
 import { ModalLibrary } from '../components/ModalLibrary.jsx'
 import { BookSearch } from '../components/BookSearch.jsx'
 
@@ -77,6 +76,21 @@ export const Dashboard = () => {
         }
     }
 
+    const readCount = books.filter((book) => book.status === 'leido').length
+    const readingCount = books.filter((book) => book.status === 'leyendo').length
+
+    const filterOptions = [
+        {label: 'Todos', value: 'todos'},
+        {label: 'Leyendo', value: 'leyendo'},
+        {label: 'Quiero Leer', value: 'quiero-leer'},
+        {label: 'Leído', value: 'leido'},
+    ]
+    const filterWithCounts = filterOptions.map((filter) => ({
+        ...filter,
+        count: filter.value === 'todos' 
+        ? books.length : books.filter((book) => book.status === filter.value).length
+    }))
+
      
   return (
     <div>
@@ -85,8 +99,8 @@ export const Dashboard = () => {
                 <span className='text-md md:text-xl text-secundario font-principal'>Hola Agustin - esto es lo que estas leyendo...</span>
             </div>
             <div className='flex flex-wrap justify-between gap-4 py-10'>
-                <StatsCards label={"Libros leidos en 2026"} value={14}/>
-                <StatsCards label={"Leyendo actualmente"} value={2}/>
+                <StatsCards label={"Libros leidos"} value={readCount}/>
+                <StatsCards label={"Leyendo actualmente"} value={readingCount}/>
                 <StatsCards label={"Páginas leidas en el mes:"} value={342}/>
             </div>
             <hr className='opacity-20'/>
@@ -100,7 +114,7 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className='py-8 font-principal'>
-                <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter}/>
+                <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter} filters={filterWithCounts}/>
             </div>
             <div className='flex items-center justify-center md:justify-start gap-4 flex-wrap'>
                 {filteredBooks.map((book) =>(
