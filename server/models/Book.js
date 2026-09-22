@@ -16,6 +16,11 @@ const bookSchema = new mongoose.Schema({
             message: `{VALUE} no es un estado valido`
         },
         default: 'quiero-leer'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 

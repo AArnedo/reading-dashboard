@@ -1,12 +1,14 @@
 import express from 'express'
 import { Book } from '../models/Book.js'
+import { protect } from '../middleware/auth.middleware.js'
 
 const router = express.Router()
 
+router.use(protect)
 //Traer todos los libros
 router.get('/', async (req, res) =>{
     try{
-        const books = await Book.find()
+        const books = await Book.find({ user: req.userId })
         res.status(200).json(books)
     } catch (error) {
         res.status(500).json({ message: 'Error al traer los libros' })
@@ -21,7 +23,7 @@ router.post('/', async (req, res) => {
         if (!title || !author){
             return res.status(400).json({ message: "El titulo y el autor son obligatorios" })
         }
-        const newBook = await Book.create({ title, author, status })
+        const newBook = await Book.create({ title, author, status, user: req.userId })
         res.status(201).json({ book: newBook, message: 'Libro creado correctamente' })
     
     } catch (error) {
@@ -29,14 +31,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-
 //Editar un libro
 router.put('/:id', async (req, res) =>{
     try{
         const { id } = req.params
         const { title, author, status } = req.body || {}
-        const updateBook = await Book.findByIdAndUpdate(
-            id,
+        const updateBook = await Book.findOneAndUpdate(
+            {_id: id, user: req.userId },
             { $set: {title, author, status} },
             { new: true, runValidators: true}
         )
@@ -50,14 +51,11 @@ router.put('/:id', async (req, res) =>{
     }
 })
 
-
 //Eliminar un libro
 router.delete('/:id', async (req, res) =>{
     try{
         const { id } = req.params
-        const deleteBook = await Book.findByIdAndDelete(
-            id,
-        )
+        const deleteBook = await Book.findOneAndDelete({ _id: id, user: req.userId })
         if(!deleteBook) {
             return res.status(404).json({ message: 'No se encontro el libro'})
         }

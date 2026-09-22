@@ -3,7 +3,7 @@ import { Header } from './Header'
 
 export const Layout = ({ children, searchQuery, onSearchChange }) => {
   return (
-    <div className='bg-background px-10 pb-10'>
+    <div className='min-h-screen bg-background px-10 pb-10'>
         <Header searchQuery={searchQuery} onSearchChange={onSearchChange}/>
         <main className='pt-10'>
             {children}

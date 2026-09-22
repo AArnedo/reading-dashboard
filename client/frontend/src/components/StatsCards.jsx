@@ -1,14 +1,13 @@
-import React from 'react'
-
-export const StatsCards = ({label, value}) => {
+export const StatsCards = ({ icon, iconBg, label, value }) => {
   return (
-    <div className=' bg-surface border border-border rounded-xl min-w-full md:min-w-xl px-6 py-2 md:p-10'>
-        <div className='text-md md:text-xl text-secundario font-secundaria'>
-            {label}
-        </div>
-        <div className='text-xl md:text-2xl pt-4 text-principal font-bold'>
-            {value}
-        </div>
+    <div className='flex items-center gap-3 bg-surface border border-border rounded-xl px-5 py-4 md:px-6 md:py-5 flex-1 min-w-42'>
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
+        {icon}
+      </div>
+      <div>
+        <p className='text-xs md:text-sm text-secundario font-secundaria'>{label}</p>
+        <p className='text-lg md:text-2xl font-bold text-principal'>{value}</p>
+      </div>
     </div>
   )
 }
