@@ -8,6 +8,7 @@ import { BookSearch } from '../components/BookSearch.jsx'
 import { EmptyState } from '../components/EmptyState.jsx'
 import { IoBookOutline, IoBookmarkOutline } from 'react-icons/io5'
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
+import { authFetch } from '../utils/authFetch.js'
 
 
 export const Dashboard = () => {
@@ -19,7 +20,7 @@ export const Dashboard = () => {
     useEffect(() =>{
         const fetchBooks = async () =>{
             try{
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/books`)
+                const response = await authFetch(`${import.meta.env.VITE_API_URL}/books`)
                 const data = await response.json()
                 setBooks(data)
             } catch (error) {
@@ -43,7 +44,7 @@ export const Dashboard = () => {
     /* new book */
     const handleAddBook = async (newBook) =>{
         try{
-            const response = await fetch (`${import.meta.env.VITE_API_URL}/books`, {
+            const response = await authFetch (`${import.meta.env.VITE_API_URL}/books`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify(newBook)
@@ -58,7 +59,7 @@ export const Dashboard = () => {
     /* update book */
     const handleStatusChange = async (id, newStatus) => {
         try{
-            const response = await fetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
+            const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ status: newStatus }),
@@ -73,7 +74,7 @@ export const Dashboard = () => {
     /* delete book */
     const handleDeleteBook = async (id) => {
         try{
-            const response = await fetch (`${import.meta.env.VITE_API_URL}/books/${id}`, { method: 'DELETE' })
+            const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, { method: 'DELETE' })
             setBooks(books.filter((book) => book._id !== id))
         } catch (error) {
             console.error('Error al eliminar el libro', error)
@@ -96,12 +97,15 @@ export const Dashboard = () => {
     }))
 
     const wantToReadCount = books.filter((book) => book.status === 'quiero-leer').length
+
+    /* leer nombre de usuario */
+    const user = JSON.parse(localStorage.getItem('user'))
      
   return (
     <div>
         <Layout searchQuery={searchQuery} onSearchChange={setSearchQuery}>
             <div>
-                <span className='text-md md:text-xl text-secundario font-principal'>Hola Agustin - esto es lo que estas leyendo...</span>
+                <span className='text-md md:text-xl text-secundario font-principal'>Hola {user?.name} - Bienvenido a tu biblioteca!</span>
             </div>
             <div className='flex flex-wrap justify-between gap-4 py-10'>
                 <StatsCards 
@@ -129,9 +133,11 @@ export const Dashboard = () => {
                     <h2 className='text-xl md:text-2xl text-principal font-semibold font-principal'>Mi biblioteca</h2>
                     <p className='text-md md:text-lg text-secundario font-principal italic'>Estos son los libros en tu colección:</p>
                 </div>
-                <div className='font-secundario'>
-                    <button onClick={() => setIsModalOpen(true)} className='bg-accent px-6 py-2 rounded-2xl text-sm md:text-lg text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
-                </div>
+                {books.length > 0 && (
+            <div className='font-secundario'>
+                <button onClick={() => setIsModalOpen(true)} className='bg-accent px-6 py-2 rounded-2xl text-sm md:text-lg text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
+            </div>
+    )}
             </div>
             <div className='py-8 font-principal'>
                 <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter} filters={filterWithCounts}/>
@@ -145,6 +151,7 @@ export const Dashboard = () => {
                     title={book.title}
                     author={book.author}
                     status={book.status}
+                    cover={book.cover}
                     onStatusChange={handleStatusChange}
                     onDelete={handleDeleteBook}
                 />

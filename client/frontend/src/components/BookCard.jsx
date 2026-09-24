@@ -3,14 +3,24 @@ import { IoBookOutline } from "react-icons/io5";
 import { bookStatus } from '../data/bookStatus';
 import { MdDelete } from "react-icons/md";
 
-export const BookCard = ({ id, title, author, status, onStatusChange, onDelete }) => {
+export const BookCard = ({ id, title, author, status, cover, onStatusChange, onDelete }) => {
   
   const statusInfo = bookStatus[status]
 
   return (
     <div className='border border-sage/40 rounded-xl  p-4 flex flex-col gap-2'>
         <div className='w-60 md:w-80 h-80 md:h-100 flex justify-center items-center rounded-xl bg-sage'>
+          {cover ? (
+             <img 
+                src={cover}
+                alt={title}
+                className='w-full h-full object-cover rounded-xl'
+              />
+          ) : ( 
             <IoBookOutline size={35}/>
+          )
+          }
+           
         </div>
         <div className='w-62 flex flex-col gap-2 font-principal'>
             <h2 className='text-lg md:text-xl text-principal font-bold truncate' title={title}>{title}</h2>

@@ -1,9 +1,16 @@
-import React from 'react'
 import { Search } from 'lucide-react';
-import { RxAvatar } from "react-icons/rx";
-
+import { IoLogOutOutline } from 'react-icons/io5' 
+import { useNavigate } from 'react-router'
 
 export const Header = ({ searchQuery, onSearchChange }) => {
+
+const navigate = useNavigate()
+const handleLogout = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  navigate('/login')
+}
+
   return (
     <header className='flex justify-between items-center border-b border-border py-4 md:py-8'>
         <div className='text-2xl md:text-4xl text-principal font-principal font-semibold cursor-pointer'>BookTracker</div>
@@ -16,9 +23,13 @@ export const Header = ({ searchQuery, onSearchChange }) => {
             onChange={(e) => onSearchChange(e.target.value)}
             className='w-full h-full focus:outline-none'/>
         </div>
-        <button className='rounded-full cursor-pointer'>
-            <RxAvatar size={40} className='text-secundario'/>
+        <button onClick={handleLogout} className="cursor-pointer">
+          <div className='flex gap-2 justify-items-center items-center'>
+            <span className='hidden md:block text-md hover:underline hover:text-red-500 duration-200'>Cerrar Sesion</span>
+            <IoLogOutOutline size={25} />
+          </div>
         </button>
+        
     </header>
   )
 }

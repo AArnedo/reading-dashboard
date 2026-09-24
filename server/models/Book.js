@@ -9,6 +9,10 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cover: {
+        type: String,
+        
+    },
     status: {
         type: String,
         enum: {
