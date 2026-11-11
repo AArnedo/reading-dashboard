@@ -62,6 +62,7 @@ export const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className='w-full p-2 focus:outline-none'
+              data-cy='register-name-input'
               required
               />
             </div>
@@ -76,6 +77,7 @@ export const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className='w-full p-2 focus:outline-none'
+              data-cy='register-email-input'
               required
               />
             </div>
@@ -90,6 +92,7 @@ export const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className='w-full p-2 focus:outline-none'
+              data-cy='register-password-input'
               required
               />
             </div>
@@ -101,6 +104,7 @@ export const Register = () => {
           <button
           type='submit'
           disabled={isLoading}
+          data-cy='register-button-submit'
           className='bg-accent py-2 rounded-xl text-background block w-full cursor-pointer'>
             {isLoading ? 'Estamos registrandote...' : 'Crear cuenta'}
           </button>

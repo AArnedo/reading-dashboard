@@ -59,6 +59,7 @@ export const Login = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder='vos@ejemplo.com'
                   className='w-full p-2 focus:outline-none'
+                  data-cy="login-email-input"
                   required
                 />
               </div>
@@ -73,16 +74,18 @@ export const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='*********'
                   className='w-full p-2 focus:outline-none'
+                  data-cy="login-password-input"
                   required
                 />
               </div>
             </div>
 
-            {error && <p className='text-red-500 text-sm text-center'>{error}</p>}
+            {error && <p className='text-red-500 text-sm text-center' data-cy="login-error-message">{error}</p>}
 
             <button
               type='submit'
               disabled={isLoading}
+              data-cy='login-button-submit'
               className='bg-accent mt-4 py-2 rounded-xl text-background block w-full cursor-pointer hover:bg-accent-dark disabled:opacity-60'
             >
               {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
@@ -90,7 +93,7 @@ export const Login = () => {
           </form>
           <div className='pt-4 text-sm flex justify-center gap-2'>
             <span>¿No tenés cuenta?</span>
-            <Link to='/register' className='text-accent cursor-pointer hover:underline'>Regístrate</Link>
+            <Link to='/register' data-cy='login-link-register' className='text-accent cursor-pointer hover:underline'>Regístrate</Link>
           </div>
         </div>
     </AuthLayout>
