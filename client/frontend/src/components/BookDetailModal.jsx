@@ -29,6 +29,7 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
   const [hoverRating, setHoverRating] = useState(null)
   const [review, setReview] = useState(savedReview)
   const [saveState, setSaveState] = useState('idle') // idle | saving | saved | error
+  const [saveError, setSaveError] = useState('')
   const [description, setDescription] = useState(
     book.description ? { status: 'ready', text: book.description } : { status: 'loading', text: '' }
   )
@@ -64,7 +65,8 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
     try {
       await onSave(book._id, { rating, review: review.trim() })
       setSaveState('saved')
-    } catch {
+    } catch (error) {
+      setSaveError(error.message)
       setSaveState('error')
     }
   }
@@ -250,7 +252,7 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
                 <Check size={16} /> Guardado
               </span>
             )}
-            {saveState === 'error' && <span className='text-red-500'>No se pudo guardar. Probá de nuevo.</span>}
+            {saveState === 'error' && <span className='text-red-500'>{saveError || 'No se pudo guardar. Probá de nuevo.'}</span>}
             {saveState === 'idle' && isDirty && <span className='text-secundario italic'>Cambios sin guardar</span>}
           </p>
           <div className='flex gap-2 ml-auto'>

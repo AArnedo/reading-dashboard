@@ -70,9 +70,22 @@ export const Dashboard = () => {
         })
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || data.message || 'Error al editar libro')
-        // usamos la forma funcional para no pisar cambios que lleguen al mismo tiempo
-        setBooks((prevBooks) => prevBooks.map((book) => (book._id === id ? data.updateBook : book)))
-        return data.updateBook
+
+        // Verificamos que el servidor realmente guardó lo que mandamos.
+        // (Un backend desactualizado responde 200 pero ignora los campos que no conoce.)
+        const saved = data.updateBook
+        const notSaved = Object.keys(fields).filter(
+            (key) => String(saved?.[key] ?? '') !== String(fields[key] ?? '')
+        )
+        if (notSaved.length > 0) {
+            throw new Error(`El servidor no guardó: ${notSaved.join(', ')}. Puede que el backend esté desactualizado.`)
+        }
+
+        // Solo pisamos los campos que enviamos: así una respuesta que llega tarde
+        // (ej: la sinopsis guardándose en segundo plano) no borra cambios más nuevos
+        const updatedFields = Object.fromEntries(Object.keys(fields).map((key) => [key, saved[key]]))
+        setBooks((prevBooks) => prevBooks.map((book) => (book._id === id ? { ...book, ...updatedFields } : book)))
+        return saved
     }
 
     const handleStatusChange = async (id, newStatus) => {
