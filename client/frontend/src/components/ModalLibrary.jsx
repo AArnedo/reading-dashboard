@@ -1,13 +1,45 @@
+import { useEffect } from 'react'
 import { IoMdClose } from "react-icons/io";
 
+// En mobile se abre como "hoja" desde abajo; en desktop, centrado.
+// El contenido (children) maneja su propio scroll interno.
 export const ModalLibrary = ({ onCloseModal, children }) => {
+
+  // Esc cierra el modal y bloqueamos el scroll de la página de fondo
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === 'Escape') onCloseModal() }
+    document.addEventListener('keydown', handleKey)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [onCloseModal])
+
   return (
-    <div className='fixed w-full h-full inset-0 bg-black/70 flex justify-center items-center' onClick={onCloseModal}>
-        <div 
+    <div
+      className='fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4'
+      onClick={onCloseModal}
+    >
+        <div
+          role='dialog'
+          aria-modal='true'
           onClick={(e) => e.stopPropagation()}
-          className='relative p-6 bg-sage-light rounded-xl min-w-150 '>
-            <IoMdClose size={25} onClick={onCloseModal} className='absolute right-10 cursor-pointer'></IoMdClose>
-            {children}
+          className='relative w-full sm:max-w-xl h-[85dvh] sm:h-auto sm:max-h-[85vh] flex flex-col bg-sage-light rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden'
+        >
+            {/* "manija" visual de la hoja en mobile */}
+            <div className='sm:hidden mx-auto mt-2 h-1.5 w-12 rounded-full bg-border-sec/30 shrink-0' />
+            <button
+              onClick={onCloseModal}
+              aria-label='Cerrar'
+              className='absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full text-secundario hover:bg-black/5 hover:text-principal cursor-pointer z-10'
+            >
+              <IoMdClose size={22} />
+            </button>
+            <div className='flex flex-col flex-1 min-h-0'>
+              {children}
+            </div>
         </div>
     </div>
   )

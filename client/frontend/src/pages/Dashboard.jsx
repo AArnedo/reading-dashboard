@@ -186,7 +186,7 @@ export const Dashboard = () => {
             <div>
                 {isModalOpen && (
                     <ModalLibrary onCloseModal={() => setIsModalOpen(false)}>
-                        <BookSearch onAddBook={handleAddBook}/>
+                        <BookSearch onAddBook={handleAddBook} libraryBooks={books}/>
                     </ModalLibrary>
                 )}
                 {selectedBook && (
