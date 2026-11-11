@@ -1,9 +1,11 @@
 import { IoBookOutline } from "react-icons/io5";
 import { RiBookShelfLine, RiBookmarkLine } from "react-icons/ri";
+import { ThemeToggle } from './ThemeToggle'
 
 export const AuthLayout = ({ children, tagline }) => {
   return (
     <div className='relative min-h-dvh flex justify-center items-center bg-background px-4 py-10 font-secundaria'>
+        <ThemeToggle className='absolute top-4 right-4' />
         <div className='grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl rounded-2xl bg-surface overflow-hidden shadow-sm'>
             <div className='hidden relative md:flex flex-col justify-between p-10 bg-accent text-on-accent'>
                 <div className='absolute right-10 top-10 rotate-12 opacity-10'>

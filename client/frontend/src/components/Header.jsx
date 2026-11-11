@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react';
 import { IoLogOutOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router'
+import { ThemeToggle } from './ThemeToggle'
 
 export const Header = ({ searchQuery, onSearchChange }) => {
 
@@ -30,6 +31,7 @@ const handleLogout = () => {
         <span className='text-lg md:text-xl text-principal font-principal font-semibold tracking-tight'>BookTracker</span>
         <div className='hidden md:block flex-1 max-w-xs ml-auto'>{searchInput}</div>
         <div className='flex items-center gap-1'>
+          <ThemeToggle />
           <button
             onClick={handleLogout}
             className='flex items-center gap-2 px-2 py-2 rounded-lg text-sm text-secundario hover:text-principal hover:bg-muted cursor-pointer transition-colors'

@@ -1,6 +1,9 @@
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+
+/* Permite usar `dark:` en clases si alguna vez hace falta */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /*
   Tema claro: "Niebla" — grises suaves, tarjetas blancas, un solo color de tinta.
@@ -27,6 +30,27 @@
     --color-danger: #B42318;
 }
 
+/* Tema oscuro: "Grafito" — negro carbón y blanco hueso, sin acentos */
+:root[data-theme="dark"] {
+    --font-numeros: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
+
+    --color-background: #141414;
+    --color-surface: #1C1C1C;
+    --color-muted: #262626;
+    --color-border: #2A2A2A;
+    --color-border-strong: #3D3D3D;
+    --color-principal: #EDEDEA;
+    --color-secundario: #8C8C87;    /* contraste 5.4:1 sobre el fondo */
+    --color-accent: #EDEDEA;
+    --color-accent-hover: #FFFFFF;
+    --color-on-accent: #141414;
+    --color-rating: #EDEDEA;
+    --color-on-rating: #141414;
+    --color-success: #7FC79A;
+    --color-danger: #F2877D;
+    color-scheme: dark;
+}
+
 html {
     background-color: var(--color-background);
     color: var(--color-principal);
@@ -34,3 +58,12 @@ html {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Transición suave al cambiar de tema (solo colores) */
+html.theme-transition,
+html.theme-transition * {
+    transition: background-color .25s ease, border-color .25s ease, color .25s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.theme-transition, html.theme-transition * { transition: none !important; }
+}
