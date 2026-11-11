@@ -53,7 +53,9 @@ export const Dashboard = () => {
                 body: JSON.stringify(newBook)
             })
             const data = await response.json();
-            setBooks([...books, data.book]);
+            if (!response.ok) throw new Error(data.message)
+            // forma funcional: si agregás varios libros seguidos no se pisan entre sí
+            setBooks((prevBooks) => [...prevBooks, data.book]);
         } catch (error){
             console.error('Error al agregar libro', error)
         }
