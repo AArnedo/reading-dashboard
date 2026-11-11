@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors({
   origin: [
-    'https://dashboard-tracking-book.vercel.app/',
+    'https://dashboard-tracking-book.vercel.app',
     'http://localhost:5173'
   ],
   credentials: true
