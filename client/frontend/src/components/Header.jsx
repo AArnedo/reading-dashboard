@@ -12,7 +12,8 @@ const handleLogout = () => {
 }
 
   return (
-    <header className='flex justify-between items-center border-b border-border py-4 md:py-8'>
+    <header className='border-b border-border py-4 md:py-8'>
+      <div className='flex justify-between items-center'>
         <div className='text-2xl md:text-4xl text-principal font-principal font-semibold cursor-pointer'>BookTracker</div>
         <div className='hidden md:flex items-center gap-4 bg-surface border border-border w-1/3 p-2 rounded-xl'>
             <Search />
@@ -29,7 +30,19 @@ const handleLogout = () => {
             <IoLogOutOutline size={25} />
           </div>
         </button>
-        
+      </div>
+
+      {/* Buscador de la biblioteca en mobile (en desktop está en la barra de arriba) */}
+      <div className='md:hidden flex items-center gap-2 bg-surface border border-border mt-4 px-3 py-2 rounded-xl focus-within:border-accent'>
+        <Search size={18} className='text-secundario shrink-0' />
+        <input
+          type="search"
+          placeholder='Buscar en tu biblioteca'
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className='w-full min-w-0 bg-transparent text-base focus:outline-none'
+        />
+      </div>
     </header>
   )
 }

@@ -119,7 +119,7 @@ export const Dashboard = () => {
             <div>
                 <span className='text-md md:text-xl text-secundario font-principal'>Hola {user?.name} - Bienvenido a tu biblioteca!</span>
             </div>
-            <div className='flex flex-wrap justify-between gap-4 py-10'>
+            <div className='grid grid-cols-3 gap-2 py-6 md:flex md:flex-wrap md:justify-between md:gap-4 md:py-10'>
                 <StatsCards 
                     icon={<IoIosCheckmarkCircleOutline size={20} className='text-principal'/>}
                     iconBg='bg-sage-light'
