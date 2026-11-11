@@ -6,6 +6,7 @@ import { FilterTabs } from '../components/FilterTabs'
 import { ModalLibrary } from '../components/ModalLibrary.jsx'
 import { BookSearch } from '../components/BookSearch.jsx'
 import { EmptyState } from '../components/EmptyState.jsx'
+import { BookDetailModal } from '../components/BookDetailModal.jsx'
 import { IoBookOutline, IoBookmarkOutline } from 'react-icons/io5'
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
 import { authFetch } from '../utils/authFetch.js'
@@ -16,6 +17,8 @@ export const Dashboard = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [books, setBooks] = useState([]);
+    const [selectedBookId, setSelectedBookId] = useState(null);
+    const selectedBook = books.find((book) => book._id === selectedBookId)
 
     useEffect(() =>{
         const fetchBooks = async () =>{
@@ -56,16 +59,23 @@ export const Dashboard = () => {
         }
     }
 
-    /* update book */
+    /* update book: actualiza cualquier campo (status, rating, review, description...) */
+    const handleUpdateBook = async (id, fields) => {
+        const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(fields),
+        })
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || data.message || 'Error al editar libro')
+        // usamos la forma funcional para no pisar cambios que lleguen al mismo tiempo
+        setBooks((prevBooks) => prevBooks.map((book) => (book._id === id ? data.updateBook : book)))
+        return data.updateBook
+    }
+
     const handleStatusChange = async (id, newStatus) => {
         try{
-            const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({ status: newStatus }),
-            })
-            const data = await response.json();
-            setBooks(books.map((book) => (book._id === id ? data.updateBook : book)))
+            await handleUpdateBook(id, { status: newStatus })
         } catch (error){
             console.error('Error al editar libro', error)
         }
@@ -152,8 +162,10 @@ export const Dashboard = () => {
                     author={book.author}
                     status={book.status}
                     cover={book.cover}
+                    rating={book.rating}
                     onStatusChange={handleStatusChange}
                     onDelete={handleDeleteBook}
+                    onOpen={setSelectedBookId}
                 />
             ))
             ) : ( 
@@ -172,8 +184,16 @@ export const Dashboard = () => {
             <div>
                 {isModalOpen && (
                     <ModalLibrary onCloseModal={() => setIsModalOpen(false)}>
-                        <BookSearch onAddBook={handleAddBook}/>   
+                        <BookSearch onAddBook={handleAddBook}/>
                     </ModalLibrary>
+                )}
+                {selectedBook && (
+                    <BookDetailModal
+                        key={selectedBook._id}
+                        book={selectedBook}
+                        onClose={() => setSelectedBookId(null)}
+                        onSave={handleUpdateBook}
+                    />
                 )}
             </div>
         </Layout>

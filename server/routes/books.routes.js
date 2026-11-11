@@ -18,11 +18,11 @@ router.get('/', async (req, res) =>{
 //Crear un libro
 router.post('/', async (req, res) => {
     try{
-        const { title, author, status, cover } = req.body || {}
+        const { title, author, status, cover, olKey } = req.body || {}
         if (!title || !author){
             return res.status(400).json({ message: "El titulo y el autor son obligatorios" })
         }
-        const newBook = await Book.create({ title, author, status, cover, user: req.userId })
+        const newBook = await Book.create({ title, author, status, cover, olKey, user: req.userId })
         res.status(201).json({ book: newBook, message: 'Libro creado correctamente' })
     
     } catch (error) {
@@ -34,10 +34,16 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) =>{
     try{
         const { id } = req.params
-        const { title, author, status } = req.body || {}
+        // Solo actualizamos los campos que vienen en el body
+        const allowedFields = ['title', 'author', 'status', 'olKey', 'description', 'rating', 'review']
+        const updates = {}
+        for (const field of allowedFields) {
+            if (req.body?.[field] !== undefined) updates[field] = req.body[field]
+        }
+
         const updateBook = await Book.findOneAndUpdate(
             {_id: id, user: req.userId },
-            { $set: {title, author, status} },
+            { $set: updates },
             { new: true, runValidators: true}
         )
 

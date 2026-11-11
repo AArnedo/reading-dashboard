@@ -33,6 +33,7 @@ export const BookSearch = ({ onAddBook }) => {
             title: book.title,
             author: book.author_name?.[0] || "autor desconocido",
             status: 'quiero-leer',
+            olKey: book.key,
             cover: book.cover_i
               ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
               : null
