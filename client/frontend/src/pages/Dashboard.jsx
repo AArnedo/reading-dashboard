@@ -7,8 +7,6 @@ import { ModalLibrary } from '../components/ModalLibrary.jsx'
 import { BookSearch } from '../components/BookSearch.jsx'
 import { EmptyState } from '../components/EmptyState.jsx'
 import { BookDetailModal } from '../components/BookDetailModal.jsx'
-import { IoBookOutline, IoBookmarkOutline } from 'react-icons/io5'
-import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
 import { authFetch } from '../utils/authFetch.js'
 
 
@@ -112,7 +110,7 @@ export const Dashboard = () => {
     const filterOptions = [
         {label: 'Todos', value: 'todos'},
         {label: 'Leyendo', value: 'leyendo'},
-        {label: 'Quiero Leer', value: 'quiero-leer'},
+        {label: 'Quiero leer', value: 'quiero-leer'},
         {label: 'Leído', value: 'leido'},
     ]
     const filterWithCounts = filterOptions.map((filter) => ({
@@ -129,45 +127,32 @@ export const Dashboard = () => {
   return (
     <div>
         <Layout searchQuery={searchQuery} onSearchChange={setSearchQuery}>
-            <div>
-                <span className='text-md md:text-xl text-secundario font-principal'>Hola {user?.name} - Bienvenido a tu biblioteca!</span>
+            <h1 className='text-2xl md:text-3xl font-principal font-medium tracking-tight text-principal'>
+                Hola, {user?.name}
+                {readingCount > 0 && (
+                    <span className='text-secundario font-normal'> · {readingCount === 1 ? '1 libro en curso' : `${readingCount} libros en curso`}</span>
+                )}
+            </h1>
+            <div className='grid grid-cols-3 md:flex md:gap-14 gap-4 py-6 md:py-8 border-b border-border'>
+                <StatsCards label='Leídos' value={readCount} />
+                <StatsCards label='Leyendo' value={readingCount} />
+                <StatsCards label='Quiero leer' value={wantToReadCount} />
             </div>
-            <div className='grid grid-cols-3 gap-2 py-6 md:flex md:flex-wrap md:justify-between md:gap-4 md:py-10'>
-                <StatsCards 
-                    icon={<IoIosCheckmarkCircleOutline size={20} className='text-principal'/>}
-                    iconBg='bg-sage-light'
-                    label='Libros leídos'
-                    value={readCount} 
-                />
-                <StatsCards 
-                    icon={<IoBookOutline size={20} className='text-accent-dark'/>}
-                    iconBg='bg-accent/15'
-                    label='Leyendo actualmente'
-                    value={readingCount} 
-                />
-                <StatsCards 
-                    icon={<IoBookmarkOutline size={20} className='text-secundario'/>}
-                    iconBg='bg-border/40'
-                    label='Quiero leer'
-                    value={wantToReadCount} 
-                />
-            </div>
-            <hr className='opacity-20'/>
-            <div className='flex flex-wrap gap-4 justify-between pt-10'>
+            <div className='flex flex-wrap gap-4 justify-between items-end pt-8 md:pt-10'>
                 <div>
-                    <h2 className='text-xl md:text-2xl text-principal font-semibold font-principal'>Mi biblioteca</h2>
-                    <p className='text-md md:text-lg text-secundario font-principal italic'>Estos son los libros en tu colección:</p>
+                    <h2 className='text-lg md:text-xl text-principal font-medium tracking-tight'>Mi biblioteca</h2>
+                    <p className='text-sm text-secundario'>Los libros de tu colección</p>
                 </div>
                 {books.length > 0 && (
-            <div className='font-secundario'>
-                <button onClick={() => setIsModalOpen(true)} className='bg-accent px-6 py-2 rounded-2xl text-sm md:text-lg text-sage-light font-semibold cursor-pointer hover:bg-accent-dark'>+ Agregar Libro</button>
+                    <button onClick={() => setIsModalOpen(true)} className='bg-accent text-on-accent px-4 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-accent-hover transition-colors'>
+                        + Agregar libro
+                    </button>
+                )}
             </div>
-    )}
-            </div>
-            <div className='py-8 font-principal'>
+            <div className='pt-5 pb-6'>
                 <FilterTabs activeFilter={activeFilter} onSelect={setActiveFilter} filters={filterWithCounts}/>
             </div>
-            <div className='flex items-center justify-center md:justify-start gap-2 flex-wrap'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4'>
                 {filteredBooks.length > 0 ? ( 
                     filteredBooks.map((book) => (
                 <BookCard

@@ -19,21 +19,21 @@ export const ModalLibrary = ({ onCloseModal, children }) => {
 
   return (
     <div
-      className='fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4'
+      className='fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px] flex items-end sm:items-center justify-center sm:p-4'
       onClick={onCloseModal}
     >
         <div
           role='dialog'
           aria-modal='true'
           onClick={(e) => e.stopPropagation()}
-          className='relative w-full sm:max-w-xl h-[85dvh] sm:h-auto sm:max-h-[85vh] flex flex-col bg-sage-light rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden'
+          className='relative w-full sm:max-w-xl h-[85dvh] sm:h-auto sm:max-h-[85vh] flex flex-col bg-surface rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden'
         >
             {/* "manija" visual de la hoja en mobile */}
-            <div className='sm:hidden mx-auto mt-2 h-1.5 w-12 rounded-full bg-border-sec/30 shrink-0' />
+            <div className='sm:hidden mx-auto mt-2 h-1.5 w-12 rounded-full bg-border-strong shrink-0' />
             <button
               onClick={onCloseModal}
               aria-label='Cerrar'
-              className='absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full text-secundario hover:bg-black/5 hover:text-principal cursor-pointer z-10'
+              className='absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full text-secundario hover:bg-muted hover:text-principal cursor-pointer z-10'
             >
               <IoMdClose size={22} />
             </button>

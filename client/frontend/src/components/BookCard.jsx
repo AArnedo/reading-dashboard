@@ -1,79 +1,79 @@
 import { IoBookOutline } from "react-icons/io5";
-import { Star } from 'lucide-react';
 import { bookStatus } from '../data/bookStatus';
-import { MdDelete } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 
 export const BookCard = ({ id, title, author, status, cover, rating, onStatusChange, onDelete, onOpen }) => {
-
+  
   const statusInfo = bookStatus[status]
   // Solo los libros leídos tienen la vista de detalle (sinopsis, puntuación y notas)
   const isOpenable = status === 'leido' && onOpen
 
   return (
-    <div className='border border-sage/40 rounded-xl  p-4 flex flex-col gap-2'>
+    <div className='group/card bg-surface rounded-xl p-2 flex flex-col gap-2.5 min-w-0'>
         <div
           onClick={isOpenable ? () => onOpen(id) : undefined}
           onKeyDown={isOpenable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(id) } } : undefined}
           role={isOpenable ? 'button' : undefined}
           tabIndex={isOpenable ? 0 : undefined}
           aria-label={isOpenable ? `Ver detalle de ${title}` : undefined}
-          className={`group relative w-60 md:w-80 h-80 md:h-100 flex justify-center items-center rounded-xl bg-sage overflow-hidden
-            ${isOpenable ? 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2' : ''}`}
+          className={`group relative w-full aspect-[2/3] flex justify-center items-center rounded-lg bg-muted overflow-hidden
+            ${isOpenable ? 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-principal focus-visible:ring-offset-2 focus-visible:ring-offset-surface' : ''}`}
         >
           {cover ? (
-             <img
+             <img 
                 src={cover}
                 alt={title}
-                className={`w-full h-full object-cover rounded-xl ${isOpenable ? 'transition-transform duration-300 group-hover:scale-105' : ''}`}
+                loading='lazy'
+                className={`w-full h-full object-cover ${isOpenable ? 'transition-transform duration-500 group-hover:scale-[1.03]' : ''}`}
               />
-          ) : (
-            <IoBookOutline size={35}/>
-          )
-          }
+          ) : ( 
+            <IoBookOutline size={30} className='text-secundario'/>
+          )}
 
           {isOpenable && (
-            <>
-              <span className={`absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-secundaria font-semibold shadow-md
-                ${rating ? 'bg-surface text-principal' : 'bg-principal/70 text-surface backdrop-blur-sm'}`}>
-                {rating ? (
-                  <><Star size={13} className='fill-accent text-accent' /> {rating}/10</>
-                ) : (
-                  'Sin puntuar'
-                )}
+            <div className='absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300'>
+              <span className='text-white text-xs font-medium'>
+                {rating ? 'Ver mi reseña' : 'Puntuar y escribir notas'}
               </span>
-              <div className='absolute inset-0 flex items-end justify-center pb-5 bg-gradient-to-t from-principal/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300'>
-                <span className='text-surface font-secundaria text-sm font-semibold'>
-                  {rating ? 'Ver mi reseña' : 'Puntuar y escribir notas'}
-                </span>
-              </div>
-            </>
+            </div>
           )}
         </div>
-        <div className='w-62 flex flex-col gap-2 font-principal'>
+
+        <div className='flex flex-col gap-0.5 px-1 min-w-0'>
             <h2
               onClick={isOpenable ? () => onOpen(id) : undefined}
-              className={`text-lg md:text-xl text-principal font-bold truncate ${isOpenable ? 'cursor-pointer hover:text-accent-dark' : ''}`}
+              className={`text-sm md:text-[15px] text-principal font-medium truncate ${isOpenable ? 'cursor-pointer hover:underline underline-offset-2' : ''}`}
               title={title}
             >
               {title}
             </h2>
-            <span className='text-sm text-secundario italic'>{author}</span>
+            <div className='flex justify-between items-baseline gap-2 text-xs text-secundario min-w-0'>
+              <span className='truncate'>{author}</span>
+              {isOpenable && (
+                rating
+                  ? <span className='font-numeros font-medium text-principal whitespace-nowrap'>{rating}/10</span>
+                  : <span className='whitespace-nowrap'>Sin puntuar</span>
+              )}
+            </div>
         </div>
-        <div className='flex justify-between items-center pt-2 md:pt-4'>
-          <select
+
+        <div className='flex justify-between items-center gap-2 px-1 pb-1'>
+          <select 
           value={status}
           onChange={(e) => onStatusChange(id, e.target.value)}
-          className={`px-2 py-1.5 rounded-xl text-sm cursor-pointer ${statusInfo.badgeClass}`}
+          aria-label={`Estado de ${title}`}
+          className={`min-w-0 px-2 py-1 rounded-md text-xs font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-principal ${statusInfo.badgeClass}`}
           >
-            <option value="quiero-leer">Quiero Leer</option>
+            <option value="quiero-leer">Quiero leer</option>
             <option value="leyendo">Leyendo</option>
-            <option value="leido">Leido</option>
+            <option value="leido">Leído</option>
           </select>
           <button
             onClick={() => onDelete(id)}
-            className='text-secundario hover:text-red-500 cursor-pointer'
+            aria-label={`Eliminar ${title}`}
+            className='p-1 rounded-md text-secundario hover:text-danger hover:bg-muted cursor-pointer transition-colors md:opacity-0 md:group-hover/card:opacity-100 focus-visible:opacity-100'
             >
-              <MdDelete size={25}/>
+              <MdDeleteOutline size={19}/>
           </button>
         </div>
     </div>

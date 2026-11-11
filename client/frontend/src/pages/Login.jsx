@@ -45,55 +45,55 @@ export const Login = () => {
     <AuthLayout tagline={"Cada libro que termines suma una página más a tu propia historia de lectura."}>
         <div>
           <div className='py-4'>
-            <span className='text-principal font-principal font-bold text-xl md:text-2xl'>Iniciar sesión</span>
-            <p className='text-secundario font-principal italic text-sm md:text-lg'>Bienvenido de nuevo a tu biblioteca</p>
+            <span className='text-principal font-medium tracking-tight text-2xl'>Iniciar sesión</span>
+            <p className='text-secundario text-sm md:text-base'>Bienvenido de nuevo a tu biblioteca</p>
           </div>
           <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <div className='flex flex-col gap-2'>
-              <label className='text-secundario text-md'>Email</label>
-              <div className='flex items-center gap-2 border rounded-xl pl-4'>
-                <CiMail className='text-accent'/>
+              <label className='text-secundario text-sm'>Email</label>
+              <div className='flex items-center gap-2 border border-transparent bg-background rounded-lg pl-3 focus-within:border-border-strong transition-colors'>
+                <CiMail className='text-secundario'/>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder='vos@ejemplo.com'
-                  className='w-full p-2 focus:outline-none'
+                  className='w-full p-2.5 bg-transparent text-principal placeholder:text-secundario focus:outline-none'
                   data-cy="login-email-input"
                   required
                 />
               </div>
             </div>
             <div className='flex flex-col gap-2'>
-              <label className='text-secundario text-md'>Contraseña</label>
-              <div className='flex items-center gap-2 border rounded-xl pl-4'>
-                <TbLockPassword className='text-accent'/>
+              <label className='text-secundario text-sm'>Contraseña</label>
+              <div className='flex items-center gap-2 border border-transparent bg-background rounded-lg pl-3 focus-within:border-border-strong transition-colors'>
+                <TbLockPassword className='text-secundario'/>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='*********'
-                  className='w-full p-2 focus:outline-none'
+                  className='w-full p-2.5 bg-transparent text-principal placeholder:text-secundario focus:outline-none'
                   data-cy="login-password-input"
                   required
                 />
               </div>
             </div>
 
-            {error && <p className='text-red-500 text-sm text-center' data-cy="login-error-message">{error}</p>}
+            {error && <p className='text-danger text-sm text-center' data-cy="login-error-message">{error}</p>}
 
             <button
               type='submit'
               disabled={isLoading}
               data-cy='login-button-submit'
-              className='bg-accent mt-4 py-2 rounded-xl text-background block w-full cursor-pointer hover:bg-accent-dark disabled:opacity-60'
+              className='bg-accent mt-4 py-2.5 rounded-lg text-on-accent text-sm font-medium block w-full cursor-pointer hover:bg-accent-hover disabled:opacity-60 transition-colors'
             >
               {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
             </button>
           </form>
-          <div className='pt-4 text-sm flex justify-center gap-2'>
+          <div className='pt-6 text-sm text-secundario flex justify-center gap-2'>
             <span>¿No tenés cuenta?</span>
-            <Link to='/register' data-cy='login-link-register' className='text-accent cursor-pointer hover:underline'>Regístrate</Link>
+            <Link to='/register' data-cy='login-link-register' className='text-principal font-medium underline underline-offset-2 cursor-pointer'>Regístrate</Link>
           </div>
         </div>
     </AuthLayout>

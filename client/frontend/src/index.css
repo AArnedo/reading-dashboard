@@ -1,20 +1,36 @@
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap');
 @import "tailwindcss";
 
-@theme{
+/*
+  Tema claro: "Niebla" — grises suaves, tarjetas blancas, un solo color de tinta.
+  Los nombres son por función, así el modo oscuro solo cambia los valores.
+*/
+@theme {
+    --font-principal: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-secundaria: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-numeros: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-    --font-principal: "Lora", serif;
-    --font-secundaria: "Inter", sans-serif;
-
-    --color-background: #FAF6F0;
-    --color-surface: #FFFDF9;
-    --color-border: #E8E1D6;
-    --color-border-sec: #6B6259;
-    --color-principal: #2E2A26;
-    --color-secundario: #6B6259;
-    --color-accent: #C4693D;
-    --color-accent-dark: #A8552F;
-    --color-sage: #7A8B6F;
-    --color-sage-light: #E4E9DE;
+    --color-background: #F3F3F1;    /* fondo de la página */
+    --color-surface: #FFFFFF;       /* tarjetas, modales, inputs */
+    --color-muted: #EAEAE7;         /* placeholders, chips, hovers */
+    --color-border: #E2E2DF;
+    --color-border-strong: #C4C5C1;
+    --color-principal: #222325;     /* texto principal */
+    --color-secundario: #65686E;    /* texto secundario (contraste 5.3:1 sobre el fondo) */
+    --color-accent: #222325;        /* botones y acciones principales */
+    --color-accent-hover: #3A3B3F;
+    --color-on-accent: #FFFFFF;     /* texto sobre accent */
+    --color-rating: #5B6B7D;        /* puntuación */
+    --color-on-rating: #FFFFFF;
+    --color-success: #3D7A55;
+    --color-danger: #B42318;
 }
+
+html {
+    background-color: var(--color-background);
+    color: var(--color-principal);
+    font-family: var(--font-secundaria);
+    -webkit-font-smoothing: antialiased;
+}
+

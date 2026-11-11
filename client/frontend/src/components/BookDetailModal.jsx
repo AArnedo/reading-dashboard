@@ -16,7 +16,7 @@ const ratingLabel = (value) => {
 }
 
 const SectionTitle = ({ children }) => (
-  <h3 className='text-xs font-secundaria font-semibold uppercase tracking-widest text-secundario mb-2'>
+  <h3 className='text-xs font-medium uppercase tracking-widest text-secundario mb-2'>
     {children}
   </h3>
 )
@@ -98,7 +98,7 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
 
   return (
     <div
-      className='fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4'
+      className='fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px] flex items-end sm:items-center justify-center sm:p-4'
       onClick={handleClose}
     >
       <div
@@ -106,12 +106,12 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
         aria-modal='true'
         aria-label={book.title}
         onClick={(e) => e.stopPropagation()}
-        className='relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-background rounded-t-2xl sm:rounded-2xl shadow-2xl'
+        className='relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-surface rounded-t-2xl sm:rounded-2xl shadow-2xl'
       >
         <button
           onClick={handleClose}
           aria-label='Cerrar'
-          className='absolute top-4 right-4 p-1.5 rounded-full text-secundario hover:bg-border/60 hover:text-principal cursor-pointer'
+          className='absolute top-4 right-4 p-1.5 rounded-full text-secundario hover:bg-muted hover:text-principal cursor-pointer'
         >
           <X size={20} />
         </button>
@@ -119,21 +119,21 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
         <div className='grid md:grid-cols-[220px_1fr] gap-6 md:gap-8 p-6 md:p-8'>
           {/* Portada */}
           <div className='flex md:flex-col items-center md:items-stretch gap-4'>
-            <div className='w-28 md:w-full aspect-[2/3] shrink-0 rounded-xl overflow-hidden bg-sage flex items-center justify-center shadow-lg shadow-principal/20'>
+            <div className='w-28 md:w-full aspect-[2/3] shrink-0 rounded-xl overflow-hidden bg-muted flex items-center justify-center shadow-lg shadow-black/20'>
               {book.cover ? (
                 <img src={book.cover} alt={book.title} className='w-full h-full object-cover' />
               ) : (
-                <IoBookOutline size={40} className='text-sage-light' />
+                <IoBookOutline size={40} className='text-secundario' />
               )}
             </div>
             <div className='md:hidden min-w-0'>
-              <h2 className='text-xl font-principal font-bold text-principal leading-tight'>{book.title}</h2>
-              <p className='text-sm font-principal italic text-secundario mt-1'>{book.author}</p>
+              <h2 className='text-xl font-medium tracking-tight text-principal leading-tight'>{book.title}</h2>
+              <p className='text-sm text-secundario mt-1'>{book.author}</p>
             </div>
             {savedRating && (
-              <div className='hidden md:flex items-center justify-center gap-2 rounded-xl bg-surface border border-border py-3'>
-                <Star size={18} className='fill-accent text-accent' />
-                <span className='font-principal text-2xl font-bold text-principal'>{savedRating}</span>
+              <div className='hidden md:flex items-center justify-center gap-2 rounded-xl bg-background py-3'>
+                <Star size={18} className='fill-rating text-rating' />
+                <span className='font-numeros text-2xl font-medium text-principal'>{savedRating}</span>
                 <span className='text-sm text-secundario'>/ 10</span>
               </div>
             )}
@@ -142,13 +142,13 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
           {/* Contenido */}
           <div className='flex flex-col gap-7 min-w-0'>
             <div className='hidden md:block pr-8'>
-              <span className='inline-block text-xs font-secundaria font-semibold px-2.5 py-1 rounded-full bg-sage-light text-principal mb-3'>
+              <span className='inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-muted text-secundario mb-3'>
                 Leído
               </span>
-              <h2 className='text-3xl font-principal font-bold text-principal leading-tight'>
+              <h2 className='text-3xl font-medium tracking-tight text-principal leading-tight'>
                 {book.title}
               </h2>
-              <p className='text-base font-principal italic text-secundario mt-1'>{book.author}</p>
+              <p className='text-base text-secundario mt-1'>{book.author}</p>
             </div>
 
             {/* Sinopsis */}
@@ -156,16 +156,16 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
               <SectionTitle>Sinopsis</SectionTitle>
               {description.status === 'loading' && (
                 <div className='space-y-2 animate-pulse' aria-label='Cargando sinopsis'>
-                  <div className='h-3 bg-border rounded w-full' />
-                  <div className='h-3 bg-border rounded w-11/12' />
-                  <div className='h-3 bg-border rounded w-3/4' />
+                  <div className='h-3 bg-muted rounded w-full' />
+                  <div className='h-3 bg-muted rounded w-11/12' />
+                  <div className='h-3 bg-muted rounded w-3/4' />
                 </div>
               )}
               {description.status === 'ready' && (
-                <p className='font-principal text-principal/90 leading-relaxed'>{description.text}</p>
+                <p className='text-principal/90 leading-relaxed'>{description.text}</p>
               )}
               {(description.status === 'empty' || description.status === 'error') && (
-                <p className='font-principal italic text-secundario text-sm'>
+                <p className='text-secundario text-sm'>
                   {description.status === 'empty'
                     ? 'No encontramos una sinopsis para este libro en Open Library.'
                     : 'No pudimos cargar la sinopsis. Probá abrir el libro de nuevo más tarde.'}
@@ -180,7 +180,7 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
                 {rating && (
                   <button
                     onClick={() => changeRating(null)}
-                    className='text-xs text-secundario hover:text-accent-dark underline-offset-2 hover:underline cursor-pointer'
+                    className='text-xs text-secundario hover:text-principal underline-offset-2 hover:underline cursor-pointer'
                   >
                     Quitar
                   </button>
@@ -204,21 +204,21 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
                       onMouseEnter={() => setHoverRating(value)}
                       onFocus={() => setHoverRating(value)}
                       onBlur={() => setHoverRating(null)}
-                      className={`h-10 rounded-lg text-sm font-secundaria font-semibold transition-all duration-150 cursor-pointer
+                      className={`h-10 rounded-lg text-sm font-numeros font-medium transition-all duration-150 cursor-pointer
                         ${isFilled
-                          ? 'bg-accent text-surface shadow-sm'
-                          : 'bg-surface border border-border text-secundario hover:border-accent/60'}
-                        ${rating === value ? 'ring-2 ring-accent-dark ring-offset-2 ring-offset-background scale-105' : ''}`}
+                          ? 'bg-rating text-on-rating'
+                          : 'bg-background border border-border text-secundario hover:border-border-strong'}
+                        ${rating === value ? 'ring-2 ring-rating ring-offset-2 ring-offset-surface' : ''}`}
                     >
                       {value}
                     </button>
                   )
                 })}
               </div>
-              <p className='mt-3 font-principal italic text-secundario'>
+              <p className='mt-3 text-sm text-secundario'>
                 {shownRating ? (
                   <>
-                    <span className='not-italic font-bold text-principal'>{shownRating}/10</span> · {ratingLabel(shownRating)}
+                    <span className='font-numeros font-medium text-principal'>{shownRating}/10</span> · {ratingLabel(shownRating)}
                   </>
                 ) : (
                   ratingLabel(null)
@@ -235,9 +235,9 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
                 maxLength={MAX_REVIEW_LENGTH}
                 rows={6}
                 placeholder='¿Qué te pareció? Personajes, frases que te marcaron, a quién se lo recomendarías…'
-                className='w-full resize-y rounded-xl bg-surface border border-border p-4 font-principal text-principal leading-relaxed placeholder:text-secundario/60 placeholder:italic focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20'
+                className='w-full resize-y rounded-xl bg-background border border-transparent p-4 text-principal leading-relaxed placeholder:text-secundario focus:outline-none focus:border-border-strong'
               />
-              <p className='text-right text-xs text-secundario mt-1'>
+              <p className='text-right text-xs font-numeros text-secundario mt-1'>
                 {review.length}/{MAX_REVIEW_LENGTH}
               </p>
             </section>
@@ -248,17 +248,17 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
         <div className='sticky bottom-0 flex flex-wrap items-center justify-between gap-3 px-6 md:px-8 py-4 bg-surface/95 backdrop-blur border-t border-border'>
           <p className='text-sm' aria-live='polite'>
             {saveState === 'saved' && (
-              <span className='flex items-center gap-1.5 text-sage font-semibold'>
+              <span className='flex items-center gap-1.5 text-success font-medium'>
                 <Check size={16} /> Guardado
               </span>
             )}
-            {saveState === 'error' && <span className='text-red-500'>{saveError || 'No se pudo guardar. Probá de nuevo.'}</span>}
-            {saveState === 'idle' && isDirty && <span className='text-secundario italic'>Cambios sin guardar</span>}
+            {saveState === 'error' && <span className='text-danger'>{saveError || 'No se pudo guardar. Probá de nuevo.'}</span>}
+            {saveState === 'idle' && isDirty && <span className='text-secundario'>Cambios sin guardar</span>}
           </p>
           <div className='flex gap-2 ml-auto'>
             <button
               onClick={handleClose}
-              className='px-4 py-2 rounded-xl text-sm text-secundario hover:bg-border/50 cursor-pointer'
+              className='px-4 py-2 rounded-lg text-sm text-secundario hover:bg-muted hover:text-principal cursor-pointer'
             >
               Cerrar
             </button>
@@ -266,7 +266,7 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
               onClick={handleSave}
               disabled={!isDirty || saveState === 'saving'}
               title='Ctrl + Enter'
-              className='px-5 py-2 rounded-xl text-sm font-semibold bg-accent text-surface hover:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+              className='px-5 py-2 rounded-lg text-sm font-medium bg-accent text-on-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
             >
               {saveState === 'saving' ? 'Guardando…' : 'Guardar cambios'}
             </button>

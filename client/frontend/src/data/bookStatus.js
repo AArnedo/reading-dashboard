@@ -1,14 +1,15 @@
+// Estilos neutros: solo "Leyendo" se destaca, porque es lo que estás leyendo ahora
 export const bookStatus = {
     'quiero-leer': {
         label: 'Quiero leer',
-        badgeClass: 'bg-sage text-sage-light'
+        badgeClass: 'bg-muted text-secundario'
     },
     'leyendo': {
         label: 'Leyendo',
-        badgeClass: 'bg-accent text-sage-light'
+        badgeClass: 'bg-accent text-on-accent'
     },
     'leido': {
         label: 'Leído',
-        badgeClass: 'bg-sage-light text-principal'
+        badgeClass: 'bg-muted text-principal'
     }
 }

@@ -92,24 +92,24 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
   return (
     <>
       {/* Cabecera fija: título + buscador */}
-      <div className='shrink-0 px-5 sm:px-6 pt-4 sm:pt-6 border-b border-border-sec/15'>
+      <div className='shrink-0 px-5 sm:px-6 pt-4 sm:pt-6 border-b border-border'>
         <div className='flex flex-col pr-10'>
-          <h3 className='text-lg font-semibold text-principal font-principal'>Agregar Libro</h3>
-          <p className='text-sm font-principal text-secundario'>Buscá en Open Library y sumalo a tu biblioteca</p>
+          <h3 className='text-lg font-medium tracking-tight text-principal'>Agregar Libro</h3>
+          <p className='text-sm text-secundario'>Buscá en Open Library y sumalo a tu biblioteca</p>
         </div>
         <form onSubmit={handleSearch} className='flex gap-2 py-4'>
-          <div className='flex items-center gap-2 border border-border-sec/50 bg-surface px-3 py-2 rounded-xl w-full min-w-0 focus-within:border-accent'>
-            <Search size={18} className='text-border-sec shrink-0'/>
+          <div className='flex items-center gap-2 border border-transparent bg-background px-3 py-2 rounded-lg w-full min-w-0 focus-within:border-border-strong'>
+            <Search size={18} className='text-secundario shrink-0'/>
             <input
               type="search"
               enterKeyHint='search'
               value={query}
               placeholder='Título o autor'
               onChange={(e) => setQuery(e.target.value)}
-              className='focus:outline-none w-full min-w-0 bg-transparent text-base'
+              className='focus:outline-none w-full min-w-0 bg-transparent text-base text-principal placeholder:text-secundario'
             />
           </div>
-          <button type='submit' className='shrink-0 bg-accent text-sage-light px-4 py-2 rounded-xl font-semibold hover:bg-accent-dark cursor-pointer'>
+          <button type='submit' className='shrink-0 bg-accent text-on-accent px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-hover cursor-pointer'>
             Buscar
           </button>
         </form>
@@ -122,12 +122,12 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
             <Loader2 size={18} className='animate-spin' /> Buscando...
           </div>
         )}
-        {error && <p className='text-red-500 text-sm py-4'>{error}</p>}
+        {error && <p className='text-danger text-sm py-4'>{error}</p>}
         {!isLoading && !error && searchedQuery && result.length === 0 && (
           <p className='text-secundario text-sm py-10 text-center'>No encontramos resultados para "{searchedQuery}"</p>
         )}
         {!isLoading && !searchedQuery && (
-          <p className='text-secundario/80 text-sm py-10 text-center italic font-principal'>
+          <p className='text-secundario text-sm py-10 text-center'>
             Escribí el título de un libro o el nombre de un autor.
           </p>
         )}
@@ -137,7 +137,7 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
             <p className='text-xs text-secundario pt-3 pb-1'>
               Mostrando {result.length} de {totalFound.toLocaleString('es-AR')} resultados
             </p>
-            <ul className='divide-y divide-border-sec/15'>
+            <ul className='divide-y divide-border'>
               {result.map((book) => {
                 const added = isInLibrary(book)
                 const isAdding = addingKey === book.key
@@ -149,25 +149,25 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
                         src={`https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg`}
                         alt={book.title}
                         loading='lazy'
-                        className='w-11 h-16 object-cover rounded shrink-0 bg-border'
+                        className='w-11 h-16 object-cover rounded shrink-0 bg-muted'
                       />
                     ) : (
-                      <div className='w-11 h-16 rounded border border-border-sec/30 flex items-center justify-center shrink-0'>
+                      <div className='w-11 h-16 rounded bg-muted flex items-center justify-center shrink-0'>
                         <IoBookOutline size={18} className='text-secundario' />
                       </div>
                     )}
                     <div className='flex-1 min-w-0'>
-                      <p className='text-sm sm:text-base font-semibold font-secundaria text-principal line-clamp-2 leading-snug'>{book.title}</p>
-                      <p className='text-xs sm:text-sm font-secundaria text-secundario italic truncate'>
+                      <p className='text-sm sm:text-base font-medium text-principal line-clamp-2 leading-snug'>{book.title}</p>
+                      <p className='text-xs sm:text-sm text-secundario truncate'>
                         {book.author_name?.[0] || 'Autor desconocido'}
-                        {book.first_publish_year && <span className='not-italic'> · {book.first_publish_year}</span>}
+                        {book.first_publish_year && <span> · {book.first_publish_year}</span>}
                       </p>
                     </div>
                     <button
                       onClick={() => handleAddClick(book)}
                       disabled={added || isAdding}
-                      className={`shrink-0 flex items-center gap-1 px-3 sm:px-4 py-1.5 rounded-full text-sm font-secundaria font-semibold cursor-pointer disabled:cursor-default
-                        ${added ? 'bg-sage/20 text-sage' : 'bg-accent-dark text-sage-light hover:bg-accent'}`}
+                      className={`shrink-0 flex items-center gap-1 px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-colors disabled:cursor-default
+                        ${added ? 'bg-muted text-secundario' : 'bg-accent text-on-accent hover:bg-accent-hover'}`}
                     >
                       {added ? <><Check size={14} /> Agregado</> : isAdding ? 'Agregando…' : 'Agregar'}
                     </button>
@@ -179,7 +179,7 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
               <button
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
-                className='w-full mt-2 py-3 rounded-xl border border-border-sec/30 text-sm font-semibold text-principal hover:bg-black/5 disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2'
+                className='w-full mt-2 py-3 rounded-lg bg-muted text-sm font-medium text-principal hover:bg-border disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2'
               >
                 {isLoadingMore ? <><Loader2 size={16} className='animate-spin' /> Cargando…</> : 'Ver más resultados'}
               </button>
