@@ -1,8 +1,22 @@
 import { IoBookOutline } from "react-icons/io5";
 import { bookStatus } from '../data/bookStatus';
 import { MdDeleteOutline } from "react-icons/md";
+import type { BookStatus } from '../types';
 
-export const BookCard = ({ id, title, author, status, cover, rating, onStatusChange, onDelete, onOpen }) => {
+interface BookCardProps {
+  id: string
+  title: string
+  author: string
+  status: BookStatus
+  cover?: string | null
+  rating?: number | null
+  // Las props que son funciones se tipan con su firma: qué reciben y qué devuelven
+  onStatusChange: (id: string, status: BookStatus) => void
+  onDelete: (id: string) => void
+  onOpen?: (id: string) => void
+}
+
+export const BookCard = ({ id, title, author, status, cover, rating, onStatusChange, onDelete, onOpen }: BookCardProps) => {
   
   const statusInfo = bookStatus[status]
   // Solo los libros leídos tienen la vista de detalle (sinopsis, puntuación y notas)
@@ -13,6 +27,7 @@ export const BookCard = ({ id, title, author, status, cover, rating, onStatusCha
         <div
           onClick={isOpenable ? () => onOpen(id) : undefined}
           onKeyDown={isOpenable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(id) } } : undefined}
+          // (TypeScript sabe que acá onOpen existe: "isOpenable" ya lo comprobó)
           role={isOpenable ? 'button' : undefined}
           tabIndex={isOpenable ? 0 : undefined}
           aria-label={isOpenable ? `Ver detalle de ${title}` : undefined}
@@ -60,7 +75,9 @@ export const BookCard = ({ id, title, author, status, cover, rating, onStatusCha
         <div className='flex justify-between items-center gap-2 px-1 pb-1'>
           <select 
           value={status}
-          onChange={(e) => onStatusChange(id, e.target.value)}
+          // e.target.value es un string cualquiera: con "as" le aseguramos que es un BookStatus
+          // (es seguro porque las únicas opciones del select son los tres estados)
+          onChange={(e) => onStatusChange(id, e.target.value as BookStatus)}
           aria-label={`Estado de ${title}`}
           className={`min-w-0 px-2 py-1 rounded-md text-xs font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-principal ${statusInfo.badgeClass}`}
           >

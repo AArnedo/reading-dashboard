@@ -3,7 +3,12 @@ import { IoLogOutOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router'
 import { ThemeToggle } from './ThemeToggle'
 
-export const Header = ({ searchQuery, onSearchChange }) => {
+interface HeaderProps {
+  searchQuery: string
+  onSearchChange: (value: string) => void
+}
+
+export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
 const navigate = useNavigate()
 const handleLogout = () => {

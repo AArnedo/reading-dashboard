@@ -1,4 +1,5 @@
-export const authFetch = async (url, options = {}) => {
+// RequestInit es el tipo nativo de las opciones de fetch (method, body, headers...)
+export const authFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const token = localStorage.getItem('token')
 
   const response = await fetch(url, {

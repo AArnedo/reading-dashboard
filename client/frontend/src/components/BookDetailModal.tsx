@@ -1,11 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { X, Check, Star } from 'lucide-react'
 import { IoBookOutline } from 'react-icons/io5'
 import { fetchBookDescription } from '../utils/openLibrary'
+import type { Book, BookUpdate } from '../types'
 
 const MAX_REVIEW_LENGTH = 2000
 
-const ratingLabel = (value) => {
+type SaveState = 'idle' | 'saving' | 'saved' | 'error'
+
+// Cada estado de la sinopsis tiene su propio "status": así es imposible un estado inválido
+interface DescriptionState {
+  status: 'loading' | 'ready' | 'empty' | 'error'
+  text: string
+}
+
+interface BookDetailModalProps {
+  book: Book
+  onClose: () => void
+  onSave: (id: string, fields: BookUpdate) => Promise<Book>
+}
+
+const ratingLabel = (value: number | null): string => {
   if (!value) return 'Todavía sin puntuar'
   if (value <= 2) return 'No me gustó'
   if (value <= 4) return 'Flojo'
@@ -15,22 +30,24 @@ const ratingLabel = (value) => {
   return 'Obra maestra'
 }
 
-const SectionTitle = ({ children }) => (
+const SectionTitle = ({ children }: { children: ReactNode }) => (
   <h3 className='text-xs font-medium uppercase tracking-widest text-secundario mb-2'>
     {children}
   </h3>
 )
 
-export const BookDetailModal = ({ book, onClose, onSave }) => {
+export const BookDetailModal = ({ book, onClose, onSave }: BookDetailModalProps) => {
   const savedRating = book.rating ?? null
   const savedReview = book.review ?? ''
 
-  const [rating, setRating] = useState(savedRating)
-  const [hoverRating, setHoverRating] = useState(null)
+  // useState infiere el tipo del valor inicial. Cuando arranca en null pero después
+  // guarda un número, se lo indicamos con un "genérico": useState<number | null>
+  const [rating, setRating] = useState<number | null>(savedRating)
+  const [hoverRating, setHoverRating] = useState<number | null>(null)
   const [review, setReview] = useState(savedReview)
-  const [saveState, setSaveState] = useState('idle') // idle | saving | saved | error
+  const [saveState, setSaveState] = useState<SaveState>('idle')
   const [saveError, setSaveError] = useState('')
-  const [description, setDescription] = useState(
+  const [description, setDescription] = useState<DescriptionState>(
     book.description ? { status: 'ready', text: book.description } : { status: 'loading', text: '' }
   )
 
@@ -66,14 +83,16 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
       await onSave(book._id, { rating, review: review.trim() })
       setSaveState('saved')
     } catch (error) {
-      setSaveError(error.message)
+      // En un catch, "error" es de tipo unknown (puede ser cualquier cosa que se haya lanzado),
+      // así que comprobamos que sea un Error antes de leer .message
+      setSaveError(error instanceof Error ? error.message : '')
       setSaveState('error')
     }
   }
 
   // Esc cierra, Ctrl/Cmd + Enter guarda, y bloqueamos el scroll de fondo
   useEffect(() => {
-    const handleKey = (e) => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleClose()
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleSave()
     }
@@ -87,11 +106,11 @@ export const BookDetailModal = ({ book, onClose, onSave }) => {
   })
 
   // Si el usuario vuelve a editar después de guardar, sacamos el "Guardado"
-  const changeRating = (value) => {
+  const changeRating = (value: number | null) => {
     setRating(value)
     setSaveState('idle')
   }
-  const changeReview = (value) => {
+  const changeReview = (value: string) => {
     setReview(value)
     setSaveState('idle')
   }

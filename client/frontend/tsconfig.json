@@ -1,0 +1,10 @@
+// Archivo "raíz": solo apunta a las dos configuraciones reales.
+// - tsconfig.app.json  -> el código de la app (src/), que corre en el navegador
+// - tsconfig.node.json -> los archivos de configuración (vite.config.ts), que corren en Node
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}

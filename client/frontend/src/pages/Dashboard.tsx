@@ -2,27 +2,41 @@ import { Layout } from '../components/Layout'
 import { useEffect, useState } from 'react'
 import { StatsCards } from '../components/StatsCards'
 import { BookCard } from '../components/BookCard'
-import { FilterTabs } from '../components/FilterTabs'
-import { ModalLibrary } from '../components/ModalLibrary.jsx'
-import { BookSearch } from '../components/BookSearch.jsx'
-import { EmptyState } from '../components/EmptyState.jsx'
-import { BookDetailModal } from '../components/BookDetailModal.jsx'
-import { authFetch } from '../utils/authFetch.js'
+import { FilterTabs, type FilterValue } from '../components/FilterTabs'
+import { ModalLibrary } from '../components/ModalLibrary'
+import { BookSearch } from '../components/BookSearch'
+import { EmptyState } from '../components/EmptyState'
+import { BookDetailModal } from '../components/BookDetailModal'
+import { authFetch } from '../utils/authFetch'
+import type { Book, BookUpdate, NewBook, User } from '../types'
+
+// Formas de las respuestas del backend (server/routes/books.routes.js)
+interface CreateBookResponse {
+    book: Book
+    message: string
+}
+
+interface UpdateBookResponse {
+    updateBook?: Book
+    message?: string
+    error?: string
+}
 
 
 export const Dashboard = () => {
-    const [activeFilter, setActiveFilter] = useState('todos');
+    const [activeFilter, setActiveFilter] = useState<FilterValue>('todos');
     const [searchQuery, setSearchQuery] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [books, setBooks] = useState([]);
-    const [selectedBookId, setSelectedBookId] = useState(null);
+    const [books, setBooks] = useState<Book[]>([]);
+    const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
     const selectedBook = books.find((book) => book._id === selectedBookId)
 
     useEffect(() =>{
         const fetchBooks = async () =>{
             try{
                 const response = await authFetch(`${import.meta.env.VITE_API_URL}/books`)
-                const data = await response.json()
+                // response.json() devuelve "any": anotando la variable decimos qué esperamos
+                const data: Book[] = await response.json()
                 setBooks(data)
             } catch (error) {
                 console.log('Error al traer los libros', error)
@@ -43,14 +57,14 @@ export const Dashboard = () => {
     
 
     /* new book */
-    const handleAddBook = async (newBook) =>{
+    const handleAddBook = async (newBook: NewBook) =>{
         try{
             const response = await authFetch (`${import.meta.env.VITE_API_URL}/books`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify(newBook)
             })
-            const data = await response.json();
+            const data: CreateBookResponse = await response.json();
             if (!response.ok) throw new Error(data.message)
             // forma funcional: si agregás varios libros seguidos no se pisan entre sí
             setBooks((prevBooks) => [...prevBooks, data.book]);
@@ -60,20 +74,25 @@ export const Dashboard = () => {
     }
 
     /* update book: actualiza cualquier campo (status, rating, review, description...) */
-    const handleUpdateBook = async (id, fields) => {
+    const handleUpdateBook = async (id: string, fields: BookUpdate): Promise<Book> => {
         const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify(fields),
         })
-        const data = await response.json();
+        const data: UpdateBookResponse = await response.json();
         if (!response.ok) throw new Error(data.error || data.message || 'Error al editar libro')
+
+        const saved = data.updateBook
+        if (!saved) throw new Error('El servidor no devolvió el libro actualizado')
+
+        // Object.keys devuelve string[]; lo convertimos a las claves reales de BookUpdate
+        const keys = Object.keys(fields) as (keyof BookUpdate)[]
 
         // Verificamos que el servidor realmente guardó lo que mandamos.
         // (Un backend desactualizado responde 200 pero ignora los campos que no conoce.)
-        const saved = data.updateBook
-        const notSaved = Object.keys(fields).filter(
-            (key) => String(saved?.[key] ?? '') !== String(fields[key] ?? '')
+        const notSaved = keys.filter(
+            (key) => String(saved[key] ?? '') !== String(fields[key] ?? '')
         )
         if (notSaved.length > 0) {
             throw new Error(`El servidor no guardó: ${notSaved.join(', ')}. Puede que el backend esté desactualizado.`)
@@ -81,12 +100,12 @@ export const Dashboard = () => {
 
         // Solo pisamos los campos que enviamos: así una respuesta que llega tarde
         // (ej: la sinopsis guardándose en segundo plano) no borra cambios más nuevos
-        const updatedFields = Object.fromEntries(Object.keys(fields).map((key) => [key, saved[key]]))
+        const updatedFields: BookUpdate = Object.fromEntries(keys.map((key) => [key, saved[key]]))
         setBooks((prevBooks) => prevBooks.map((book) => (book._id === id ? { ...book, ...updatedFields } : book)))
         return saved
     }
 
-    const handleStatusChange = async (id, newStatus) => {
+    const handleStatusChange = async (id: string, newStatus: Book['status']) => {
         try{
             await handleUpdateBook(id, { status: newStatus })
         } catch (error){
@@ -95,9 +114,9 @@ export const Dashboard = () => {
     }
 
     /* delete book */
-    const handleDeleteBook = async (id) => {
+    const handleDeleteBook = async (id: string) => {
         try{
-            const response = await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, { method: 'DELETE' })
+            await authFetch (`${import.meta.env.VITE_API_URL}/books/${id}`, { method: 'DELETE' })
             setBooks(books.filter((book) => book._id !== id))
         } catch (error) {
             console.error('Error al eliminar el libro', error)
@@ -107,7 +126,7 @@ export const Dashboard = () => {
     const readCount = books.filter((book) => book.status === 'leido').length
     const readingCount = books.filter((book) => book.status === 'leyendo').length
 
-    const filterOptions = [
+    const filterOptions: { label: string; value: FilterValue }[] = [
         {label: 'Todos', value: 'todos'},
         {label: 'Leyendo', value: 'leyendo'},
         {label: 'Quiero leer', value: 'quiero-leer'},
@@ -122,7 +141,8 @@ export const Dashboard = () => {
     const wantToReadCount = books.filter((book) => book.status === 'quiero-leer').length
 
     /* leer nombre de usuario */
-    const user = JSON.parse(localStorage.getItem('user'))
+    // getItem puede devolver null, y JSON.parse solo acepta strings: por eso el "?? 'null'"
+    const user: User | null = JSON.parse(localStorage.getItem('user') ?? 'null')
      
   return (
     <div>

@@ -1,6 +1,13 @@
+import type { ReactNode } from 'react'
 import { Header } from './Header'
 
-export const Layout = ({ children, searchQuery, onSearchChange }) => {
+interface LayoutProps {
+  children: ReactNode
+  searchQuery: string
+  onSearchChange: (value: string) => void
+}
+
+export const Layout = ({ children, searchQuery, onSearchChange }: LayoutProps) => {
   return (
     <div className='min-h-screen bg-background text-principal font-secundaria'>
       <div className='max-w-6xl mx-auto px-4 sm:px-6 md:px-10 pb-16'>

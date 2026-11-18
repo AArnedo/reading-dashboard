@@ -1,13 +1,19 @@
-import { useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { IoMdClose } from "react-icons/io";
+
+interface ModalLibraryProps {
+  onCloseModal: () => void
+  children: ReactNode
+}
 
 // En mobile se abre como "hoja" desde abajo; en desktop, centrado.
 // El contenido (children) maneja su propio scroll interno.
-export const ModalLibrary = ({ onCloseModal, children }) => {
+export const ModalLibrary = ({ onCloseModal, children }: ModalLibraryProps) => {
 
   // Esc cierra el modal y bloqueamos el scroll de la página de fondo
   useEffect(() => {
-    const handleKey = (e) => { if (e.key === 'Escape') onCloseModal() }
+    // Este listener es del DOM (no de React), por eso usa el KeyboardEvent nativo
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCloseModal() }
     document.addEventListener('keydown', handleKey)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'

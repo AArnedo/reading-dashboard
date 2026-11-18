@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { applyTheme, getInitialTheme, hasSavedTheme, saveTheme } from '../utils/theme'
 
-export const ThemeToggle = ({ className = '' }) => {
-  const [theme, setTheme] = useState(getInitialTheme)
+import type { Theme } from '../types'
+
+export const ThemeToggle = ({ className = '' }: { className?: string }) => {
+  const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
   // Si el usuario nunca eligió, seguimos los cambios del sistema en vivo
   useEffect(() => {
     if (hasSavedTheme()) return
     const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e) => {
+    const handleChange = (e: MediaQueryListEvent) => {
       if (hasSavedTheme()) return
-      const next = e.matches ? 'dark' : 'light'
+      const next: Theme = e.matches ? 'dark' : 'light'
       applyTheme(next, { animate: true })
       setTheme(next)
     }

@@ -1,29 +1,50 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { IoBookOutline } from 'react-icons/io5';
 import { Search, Check, Loader2 } from 'lucide-react';
+import type { Book, NewBook } from '../types';
 
 const RESULTS_PER_PAGE = 20
 
-export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
+// Un resultado de búsqueda de Open Library (solo los campos que pedimos en "fields")
+interface SearchResult {
+    key: string
+    title: string
+    author_name?: string[]
+    cover_i?: number
+    first_publish_year?: number
+}
+
+interface SearchResponse {
+    docs: SearchResult[]
+    numFound: number
+}
+
+interface BookSearchProps {
+    onAddBook: (book: NewBook) => Promise<void>
+    libraryBooks?: Book[]
+}
+
+export const BookSearch = ({ onAddBook, libraryBooks = [] }: BookSearchProps) => {
 
     const [query, setQuery] = useState('');
     const [searchedQuery, setSearchedQuery] = useState('');
-    const [result, setResult] = useState([]);
+    // Sin el genérico, useState([]) infiere never[] y no podríamos guardar nada
+    const [result, setResult] = useState<SearchResult[]>([]);
     const [totalFound, setTotalFound] = useState(0);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [error, setError] = useState(null);
-    const [addingKey, setAddingKey] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [addingKey, setAddingKey] = useState<string | null>(null);
 
     // Para marcar como "Agregado" los libros que ya están en la biblioteca
     const libraryKeys = new Set(libraryBooks.map((b) => b.olKey).filter(Boolean))
     const libraryTitles = new Set(libraryBooks.map((b) => `${b.title}|${b.author}`.toLowerCase()))
-    const isInLibrary = (book) =>
+    const isInLibrary = (book: SearchResult) =>
         libraryKeys.has(book.key) ||
         libraryTitles.has(`${book.title}|${book.author_name?.[0] || 'autor desconocido'}`.toLowerCase())
 
-    const fetchPage = async (searchText, pageNumber) => {
+    const fetchPage = async (searchText: string, pageNumber: number): Promise<SearchResponse> => {
         const params = new URLSearchParams({
             q: searchText,
             page: String(pageNumber),
@@ -35,13 +56,15 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
         return response.json()
     }
 
-    const handleSearch = async (e) =>{
+    // Los eventos de React también tienen tipo: FormEvent para el submit de un form
+    const handleSearch = async (e: FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
         const searchText = query.trim()
         if (!searchText) return // para evitar que se busque con el input vacio
 
         // en mobile cerramos el teclado para que se vean los resultados
-        document.activeElement?.blur()
+        // (activeElement es un Element genérico: solo los HTMLElement tienen .blur())
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
 
         setIsLoading(true)
         setError(null)
@@ -72,8 +95,8 @@ export const BookSearch = ({ onAddBook, libraryBooks = [] }) => {
         }
     }
 
-    const handleAddClick = async (book) =>{
-        const newBook = {
+    const handleAddClick = async (book: SearchResult) =>{
+        const newBook: NewBook = {
             title: book.title,
             author: book.author_name?.[0] || "autor desconocido",
             status: 'quiero-leer',

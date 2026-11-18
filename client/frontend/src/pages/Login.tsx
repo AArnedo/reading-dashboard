@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { AuthLayout } from '../components/AuthLayout'
 import { CiMail } from "react-icons/ci";
@@ -8,10 +8,10 @@ export const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
     setIsLoading(true)
@@ -34,7 +34,7 @@ export const Login = () => {
       localStorage.setItem('user', JSON.stringify(data.user))
 
       navigate('/')
-    } catch (err) {
+    } catch {
       setError('Error de conexión. Probá de nuevo.')
     } finally {
       setIsLoading(false)

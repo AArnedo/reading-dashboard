@@ -1,6 +1,13 @@
 import { IoBookOutline } from 'react-icons/io5'
 
-export const EmptyState = ({ title, message, actionLabel, onAction }) => {
+interface EmptyStateProps {
+  title: string
+  message?: string
+  actionLabel?: string
+  onAction?: () => void
+}
+
+export const EmptyState = ({ title, message, actionLabel, onAction }: EmptyStateProps) => {
   return (
     <div className='col-span-full w-full flex flex-col items-center justify-center text-center py-24 px-4 bg-surface rounded-2xl'>
       <IoBookOutline size={32} className='text-secundario mb-3' />

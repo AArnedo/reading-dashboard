@@ -1,8 +1,15 @@
 import { IoBookOutline } from "react-icons/io5";
 import { RiBookShelfLine, RiBookmarkLine } from "react-icons/ri";
+import type { ReactNode } from 'react'
 import { ThemeToggle } from './ThemeToggle'
 
-export const AuthLayout = ({ children, tagline }) => {
+// ReactNode = cualquier cosa que React puede renderizar (JSX, texto, null...)
+interface AuthLayoutProps {
+  children: ReactNode
+  tagline: string
+}
+
+export const AuthLayout = ({ children, tagline }: AuthLayoutProps) => {
   return (
     <div className='relative min-h-dvh flex justify-center items-center bg-background px-4 py-10 font-secundaria'>
         <ThemeToggle className='absolute top-4 right-4' />

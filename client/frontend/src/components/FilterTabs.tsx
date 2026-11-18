@@ -1,5 +1,22 @@
+import type { BookStatus } from '../types'
+
+// 'todos' más cualquiera de los estados de libro
+export type FilterValue = 'todos' | BookStatus
+
+export interface FilterOption {
+  label: string
+  value: FilterValue
+  count: number
+}
+
+interface FilterTabsProps {
+  activeFilter: FilterValue
+  onSelect: (value: FilterValue) => void
+  filters: FilterOption[]
+}
+
 // Control segmentado: el filtro activo queda como una "pestaña" sobre el fondo
-export const FilterTabs = ({ activeFilter, onSelect, filters }) => {
+export const FilterTabs = ({ activeFilter, onSelect, filters }: FilterTabsProps) => {
   return (
     <div className='flex gap-1 overflow-x-auto -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden' role='tablist'>
         {filters.map((filter) => {

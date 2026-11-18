@@ -2,7 +2,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import { TbLockPassword } from 'react-icons/tb'
 import { CiMail } from 'react-icons/ci'
 import { CiUser } from "react-icons/ci";
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router';
 
 
@@ -11,10 +11,10 @@ export const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('') 
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
     setIsLoading(true)
@@ -37,7 +37,7 @@ export const Register = () => {
       localStorage.setItem('user', JSON.stringify(data.user))
       
       navigate('/login')
-    } catch (err){
+    } catch {
       setError('Error de conexion, proba nuevamente')
     } finally{
       setIsLoading(false)

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Register } from './pages/Register'
 import { Routes, Route } from 'react-router'
 import { Dashboard } from './pages/Dashboard'
