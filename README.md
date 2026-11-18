@@ -134,6 +134,6 @@ Este proyecto fue mi entrada práctica al desarrollo full stack, con foco en ent
 ## 👤 Autor
 
 **Agustín**
-- LinkedIn: <TU_LINK_DE_LINKEDIN>
-- Portfolio: <TU_LINK_DE_PORTFOLIO>
-- GitHub: [@<TU_USUARIO>](https://github.com/<TU_USUARIO>)
+- LinkedIn: https://www.linkedin.com/in/agustinarnedo/
+- Portfolio: https://arnedo-agustin-dev.vercel.app/
+- GitHub: [@AArnedo](https://github.com/AArnedo)
